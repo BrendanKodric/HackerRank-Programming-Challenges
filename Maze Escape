@@ -1,0 +1,152 @@
+#include"pch.h"
+#include <iostream>
+#include <iomanip>
+#include <stdio.h>
+#include <string>
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int * move_bot(int[], int, char[][8]);
+//void direction_output(int, bool);
+
+int main()
+{
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+
+    const int n_maze = 7;
+    int b[2];
+    int exit[2];
+    int i, j;
+    char maze[n_maze][n_maze + 1] =
+    {
+        { '#','#','#','#','#','#','#' },
+        { '#','-','-','#','-','b','#' },
+        { '#','-','-','#','-','-','#' },
+        { '#','-','-','#','-','-','#' },
+        { 'e','-','-','-','-','-','#' },
+        { '#','-','-','-','-','-','#' },
+        { '#','#','#','#','#','#','#' }
+    };
+
+        // Find the bot
+    for (i = 1; i < (n_maze - 1); i++)
+    {
+        for (j = 1; j < (n_maze - 1); j++)
+        {
+            if (maze[i][j] == 'b')
+            {
+                b[0] = i;
+                b[1] = j;
+                break;
+            }
+        }
+    }
+
+    // Find the exit
+    for (i = 0; i < (n_maze); i++)
+    {
+        if (i == 0 || i == n_maze)
+        {
+            for (j = 0; j < (n_maze); j++)
+            {
+                if (maze[i][j] == 'e')
+                {
+                    exit[0] = i;
+                    exit[1] = j;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (j = 0; j < (n_maze);)
+            {
+                if (maze[i][j] == 'e')
+                {
+                    exit[0] = i;
+                    exit[1] = j;
+                    break;
+                }
+                j = j + (n_maze - 1);
+            }
+        }
+    }
+
+    int *bot_move;
+
+    while (b[0] != exit[0] || b[1] != exit[1])
+    {
+        bot_move = move_bot(b, 2, maze);
+    }
+    if (b[0] == exit[0] && b[1] == exit[1])
+    {
+        cout << "\nYOU MADE IT OUT OF THE MAZE!!!\n\n";
+    }
+
+    return 0;
+}
+
+int * move_bot(int b[], int size, char maze[][8])
+{
+    // Move the bot
+    int movement;
+
+    // Upper-left of bot is:
+    int y = b[0] - 1;
+    int x = b[1] - 1;
+
+    // Decide move
+    if ((maze[y][x + 1] == '#' && maze[y + 1][x] == '-') || maze[y + 1][x] == 'e')
+    {
+        b[1]--; // move left
+        movement = 3;
+        cout << "LEFT\n";
+    }
+    else if ((maze[y + 1][x] == '#' && maze[y + 2][x + 1] == '-') || maze[y + 2][x + 1] == 'e')
+    {
+        b[0]++; // move down
+        movement = 2;
+        cout << "DOWN\n";
+    }
+    else if ((maze[y + 2][x + 1] == '#' && maze[y + 1][x + 2] == '-') || maze[y + 1][x + 2] == 'e')
+    {
+        b[1]++; // move right
+        movement = 1;
+        cout << "RIGHT\n";
+    }
+    else if ((maze[y + 1][x + 2] == '#' && maze[y][x + 1] == '-') || maze[y][x + 1] == 'e')
+    {
+        b[0]--; // move up
+        movement = 0;
+        cout << "UP\n";
+    }
+    else if(maze[y + 1][x] == '-' && maze[y + 2][x + 1] == '-' && maze[y + 1][x + 2] == '-' && maze[y][x + 1] == '-')
+    {
+        if(maze[y][x] == '#'){
+            b[1]--; // move left
+            movement = 3;
+            cout << "LEFT\n";
+        }
+        else if (maze[y+2][x] == '#') {
+            b[0]++; // move down
+            movement = 2;
+            cout << "DOWN\n";
+        }
+        else if (maze[y][x+2] == '#') {
+            b[0]--; // move up
+            movement = 0;
+            cout << "UP\n";
+        }
+        else if (maze[y+2][x+2] == '#') {
+            b[1]++; // move right
+            movement = 1;
+            cout << "RIGHT\n";
+        };
+    };
+    
+    return b;
+}
