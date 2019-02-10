@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void nextMove(int n, int r, int c, vector <string> grid)
+{
+    int x_p, y_p, x_m = c, y_m = r;
+    int x_diff, y_diff;
+    bool flag = false;
+    
+    for(int i = 0; i < (n); i++)
+    {
+        for(int j = 0; j < (n); j++)
+        {
+            if(grid[i][j] == 'p')
+            {
+                y_p = i;
+                x_p = j;
+                flag = true;
+                break;
+            }
+        }
+        if(flag == true)
+            {break;}
+    }
+    
+    y_diff = y_p - y_m;
+    x_diff = x_p - x_m;
+    
+    if(x_diff != 0)
+    {
+        if(x_diff < 0)
+        {
+            cout << "LEFT\n";
+            x_diff++;
+        }
+        if(x_diff > 0)
+        {
+            cout << "RIGHT\n";
+            x_diff--;
+        }
+    }
+    else
+    {
+        if(y_diff < 0)
+        {
+            cout << "UP\n";
+            y_diff++;
+        }
+        if(y_diff > 0)
+        {
+            cout << "DOWN\n";
+            y_diff--;
+        }
+    }
+}
+
+int main(void) {
+
+    int n, r, c;
+    vector <string> grid;
+
+    cin >> n;
+    cin >> r;
+    cin >> c;
+
+    for(int i=0; i<n; i++) {
+        string s; cin >> s;
+        grid.push_back(s);
+    }
+
+    nextMove(n, r, c, grid);
+    return 0;
+}
